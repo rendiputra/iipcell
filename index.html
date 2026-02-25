@@ -5,7 +5,17 @@
     <meta charset="utf-8" />
     <meta content="width=device-width, initial-scale=1.0" name="viewport" />
     <title>iip cell - Pusat Jual Beli iPhone Terpercaya</title>
-    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <!-- Preconnect to improve font loading -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+    <!-- Preload LCP Banner -->
+    <link
+      rel="preload"
+      as="image"
+      href="https://lh3.googleusercontent.com/aida-public/AB6AXuCK_6CgTMLc3xDX87SshSdRwzBDA1U8UljmEwVgAvLWIwkzSA7SrZaIPYCAyhrpGRhUepBGMtFlOKfjQuUK8IwyzMwmm6Bm7s4PJ3IrkpULHkGvk12JVqrUYKalavpeVppNDlxFwg4UGTUmeKpwAXm0OcanH0rG--s8IRjzHGIeR7Zsz8uPX6lfYTlt8wXxdbvft8IqUE5Un-87KSscncHfEDrF2nv3rOiT10jytrDEsKkphfhCsuaqW-6D2hHHSCUEavIC8kB7_g"
+    />
+
     <link
       href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&amp;display=swap"
       rel="stylesheet"
@@ -14,45 +24,9 @@
       href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
       rel="stylesheet"
     />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
-      rel="stylesheet"
-    />
-    <script id="tailwind-config">
-      tailwind.config = {
-        darkMode: "class",
-        theme: {
-          extend: {
-            colors: {
-              primary: "#137fec",
-              "background-light": "#f6f7f8",
-              "background-dark": "#101922",
-            },
-            fontFamily: {
-              display: ["Inter", "sans-serif"],
-            },
-            borderRadius: {
-              DEFAULT: "1rem",
-              lg: "2rem",
-              xl: "3rem",
-              full: "9999px",
-            },
-          },
-        },
-      };
-    </script>
-    <style>
-      body {
-        font-family: "Inter", sans-serif;
-      }
-      .material-symbols-outlined {
-        font-variation-settings:
-          "FILL" 0,
-          "wght" 400,
-          "GRAD" 0,
-          "opsz" 24;
-      }
-    </style>
+
+    <!-- Compiled CSS for better performance -->
+    <link rel="stylesheet" href="style.css" />
   </head>
   <body
     class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 min-h-screen flex flex-col font-display"
@@ -99,7 +73,12 @@
         </a>
       </div>
       <div class="lg:hidden">
-        <button class="text-slate-900 dark:text-white p-2">
+        <button
+          id="hamburger-btn"
+          aria-label="Toggle Menu"
+          aria-expanded="false"
+          class="text-slate-900 dark:text-white p-2 z-50 relative transition-transform active:scale-95"
+        >
           <span class="material-symbols-outlined">menu</span>
         </button>
       </div>
@@ -149,18 +128,14 @@
                     </a></span
                   >
                 </button>
-                <button
+                <a
                   class="flex items-center justify-center gap-2 rounded-full h-14 px-8 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-900 dark:text-white text-base font-bold transition-colors"
+                  href="https://instagram.com/iip.cell"
+                  target="_blank"
+                  rel="noopener noreferrer"
                 >
-                  <span
-                    ><a
-                      href="https://instagram.com/iip.cell"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      >Lihat Katalog</a
-                    ></span
-                  >
-                </button>
+                  <span> Lihat Katalog </span>
+                </a>
               </div>
               <div
                 class="flex items-center gap-4 mt-4 text-sm text-slate-500 dark:text-slate-400"
@@ -574,5 +549,83 @@
         </div>
       </div>
     </footer>
+    <!-- Mobile Menu Overlay -->
+    <div
+      id="mobile-menu"
+      class="fixed inset-0 z-[60] bg-white/95 dark:bg-slate-900/95 backdrop-blur-md hidden flex-col items-center justify-center gap-8 lg:hidden opacity-0 transition-opacity duration-300"
+    >
+      <nav class="flex flex-col items-center gap-6">
+        <a
+          class="mobile-nav-link text-slate-900 dark:text-white text-2xl font-bold transition-colors hover:text-primary"
+          href="#services"
+          >Layanan</a
+        >
+        <a
+          class="mobile-nav-link text-slate-900 dark:text-white text-2xl font-bold transition-colors hover:text-primary"
+          href="#advantages"
+          >Keunggulan</a
+        >
+        <a
+          class="mobile-nav-link text-slate-900 dark:text-white text-2xl font-bold transition-colors hover:text-primary"
+          href="#contact"
+          >Kontak</a
+        >
+      </nav>
+      <a
+        href="https://wa.me/62085890334083?text=Halo%20admin!%20Saya%20dapat%20info%20kontak%20ini%20dari%20website.%20Mau%20tanya-tanya%20seputar%20ketersediaan%20stok%20iPhone,%20pricelist%20terbaru,%20atau%20promo%20hari%20ini%20ya%20kak."
+        target="_blank"
+        rel="noopener noreferrer"
+        class="mobile-nav-link flex items-center justify-center rounded-full h-12 px-8 bg-primary text-white text-base font-bold leading-normal tracking-wide shadow-lg shadow-blue-500/20 mt-4"
+      >
+        WhatsApp Us
+      </a>
+    </div>
+
+    <!-- Mobile Menu Script -->
+    <script>
+      const rawBtn = document.getElementById("hamburger-btn");
+      const mobileMenu = document.getElementById("mobile-menu");
+      const navLinks = mobileMenu.querySelectorAll(".mobile-nav-link");
+      const rawIcon = rawBtn.querySelector("span");
+
+      const closeMenu = () => {
+        mobileMenu.classList.remove("opacity-100");
+        mobileMenu.classList.add("opacity-0");
+        setTimeout(() => {
+          mobileMenu.classList.add("hidden");
+          mobileMenu.classList.remove("flex");
+        }, 300); // Wait for transition
+        rawIcon.textContent = "menu";
+        document.body.style.overflow = "auto"; // Re-enable scroll
+        rawBtn.setAttribute("aria-expanded", "false");
+        rawBtn.style.zIndex = "";
+      };
+
+      const openMenu = () => {
+        mobileMenu.classList.remove("hidden");
+        mobileMenu.classList.add("flex");
+        // Small delay to ensure display: flex is applied before opacity transition
+        setTimeout(() => {
+          mobileMenu.classList.remove("opacity-0");
+          mobileMenu.classList.add("opacity-100");
+        }, 10);
+        rawIcon.textContent = "close";
+        document.body.style.overflow = "hidden"; // Disable scroll
+        rawBtn.setAttribute("aria-expanded", "true");
+        rawBtn.style.zIndex = "70"; // Keep button above menu
+      };
+
+      rawBtn.addEventListener("click", () => {
+        if (mobileMenu.classList.contains("hidden")) {
+          openMenu();
+        } else {
+          closeMenu();
+        }
+      });
+
+      navLinks.forEach((link) => {
+        link.addEventListener("click", closeMenu);
+      });
+    </script>
   </body>
 </html>
