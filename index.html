@@ -35,16 +35,37 @@
       rel="preload"
       as="image"
       href="/img/banner.webp"
+      fetchpriority="high"
     />
 
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&display=swap" rel="stylesheet" />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
-      rel="stylesheet"
-    />
+    <!-- Preload Critical CSS and Fonts -->
+    <link rel="preload" href="style.css" as="style" fetchpriority="high" />
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&display=swap" as="style" crossorigin="anonymous" />
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" as="style" crossorigin="anonymous" />
+
+    <!-- Prevent CLS from Material Symbols text fallback -->
+    <style>
+      .material-symbols-outlined {
+        display: inline-block;
+        width: 1em;
+        height: 1em;
+        line-height: 1;
+        overflow: hidden;
+        white-space: nowrap;
+        vertical-align: middle;
+      }
+    </style>
 
     <!-- Compiled CSS for better performance -->
-    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="style.css" fetchpriority="high" />
+
+    <!-- Non-blocking Google Fonts -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&display=swap" media="print" onload="this.media='all'" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" media="print" onload="this.media='all'" />
+    <noscript>
+      <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&display=swap" />
+      <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" />
+    </noscript>
     <!-- Google tag (gtag.js) -->
     <!-- <script async src="https://www.googletagmanager.com/gtag/js?id=G-XVW2GZELML"></script>
     <script>
@@ -655,21 +676,33 @@
       });
     </script>
     <script>
-      window.addEventListener('load', function() {
-        // Menunda pemuatan GTM selama 3 detik setelah halaman selesai dimuat sempurna
-        setTimeout(function() {
-          var script = document.createElement('script');
-          script.async = true;
-          script.src = "https://www.googletagmanager.com/gtag/js?id=G-XVW2GZELML";
-          document.head.appendChild(script);
+      // Optimization: Lazy load GTM on user interaction to maximize Pagespeed score (reduces TBT and Unused JS)
+      let gtmLoaded = false;
+      function loadGTM() {
+        if (gtmLoaded) return;
+        gtmLoaded = true;
+        var script = document.createElement('script');
+        script.async = true;
+        script.src = "https://www.googletagmanager.com/gtag/js?id=G-XVW2GZELML";
+        document.head.appendChild(script);
 
-          window.dataLayer = window.dataLayer || [];
-          function gtag(){dataLayer.push(arguments);}
-          gtag('js', new Date());
-          gtag('config', 'G-XVW2GZELML');
-          
-          // console.log('GTM Loaded with delay for performance');
-        }, 1500);
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-XVW2GZELML');
+        
+        ['scroll', 'mousemove', 'touchstart', 'click', 'keydown'].forEach(function(ev) {
+          window.removeEventListener(ev, loadGTM);
+        });
+      }
+
+      ['scroll', 'mousemove', 'touchstart', 'click', 'keydown'].forEach(function(ev) {
+        window.addEventListener(ev, loadGTM, { passive: true, once: true });
+      });
+
+      // Fallback: load after 3.5s if no interaction
+      window.addEventListener('load', function() {
+        setTimeout(loadGTM, 3000);
       });
     </script>
   </body>
